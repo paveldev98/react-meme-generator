@@ -53,14 +53,6 @@ export default function App() {
         }}
       >
         <Input
-          name="meme-template"
-          label="Meme Template: "
-          placeholderText='Type e.g. "buzz" '
-          value={memeTemplate}
-          onChange={(event) => setMemeTemplate(event.target.value)}
-          onKeyDown={handleKeyDown}
-        />
-        <Input
           name="top-text"
           label="Top Text: "
           placeholderText="Type your text on top"
@@ -74,6 +66,14 @@ export default function App() {
           placeholderText="Type your bottom text"
           value={bottomText}
           onChange={(event) => setBottomText(event.target.value)}
+          onKeyDown={handleKeyDown}
+        />
+        <Input
+          name="meme-template"
+          label="Meme Template: "
+          placeholderText='Type e.g. "buzz" '
+          value={memeTemplate}
+          onChange={(event) => setMemeTemplate(event.target.value)}
           onKeyDown={handleKeyDown}
         />
       </div>
