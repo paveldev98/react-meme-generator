@@ -54,7 +54,7 @@ export default function App() {
       >
         <Input
           name="top-text"
-          label="Top Text: "
+          label="Top text"
           placeholderText="Type your text on top"
           value={topText}
           onChange={(event) => setTopText(event.target.value)}
@@ -62,7 +62,7 @@ export default function App() {
         />
         <Input
           name="bottom-text"
-          label="Bottom Text: "
+          label="Bottom text"
           placeholderText="Type your bottom text"
           value={bottomText}
           onChange={(event) => setBottomText(event.target.value)}
@@ -70,7 +70,7 @@ export default function App() {
         />
         <Input
           name="meme-template"
-          label="Meme Template: "
+          label="Meme template"
           placeholderText='Type e.g. "buzz" '
           value={memeTemplate}
           onChange={(event) => setMemeTemplate(event.target.value)}
