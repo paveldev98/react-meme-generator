@@ -7,7 +7,7 @@ import MemePreview from './MemePreview';
 export default function App() {
   const [topText, setTopText] = useState('');
   const [bottomText, setBottomText] = useState('');
-  const [memeTemplate, setMemeTemplate] = useState('buzz'); // Default template
+  const [memeTemplate, setMemeTemplate] = useState(''); // Default template
   const [memeUrl, setMemeUrl] = useState('');
 
   // Function to format text inputs
@@ -17,7 +17,7 @@ export default function App() {
   const generateMemeUrl = useCallback(() => {
     const formattedTopText = formatText(topText);
     const formattedBottomText = formatText(bottomText);
-    const template = memeTemplate.trim() || 'buzz'; // Default to 'buzz' template if empty
+    const template = memeTemplate.trim() || 'aag'; // Default to 'aag' template if empty
 
     const imageUrl = `https://memegen.link/${template}/${formattedTopText}/${formattedBottomText}.jpg`;
     return imageUrl;
@@ -66,7 +66,7 @@ export default function App() {
         <Input
           name="meme-template"
           label="Meme template"
-          placeholderText='Type e.g. "buzz" '
+          placeholderText='Type e.g. "doge" '
           value={memeTemplate}
           onChange={(event) => setMemeTemplate(event.target.value)}
         />
