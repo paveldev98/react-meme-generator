@@ -1,5 +1,5 @@
 import './App.css';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import DownloadButton from './DownloadButton';
 import Input from './Input';
 import MemePreview from './MemePreview';
@@ -7,30 +7,27 @@ import MemePreview from './MemePreview';
 export default function App() {
   const [topText, setTopText] = useState('');
   const [bottomText, setBottomText] = useState('');
-  const [memeTemplate, setMemeTemplate] = useState('');
+  const [memeTemplate, setMemeTemplate] = useState('buzz'); // Default template
   const [memeUrl, setMemeUrl] = useState('');
-  const [userHasEntered, setUserHasEntered] = useState(false);
 
-  const formattedTopText = topText.trim().replace(/ /g, '_') || '_';
-  const formattedBottomText = bottomText.trim().replace(/ /g, '_') || '_';
-  const firstRenderedUrl = `https://memegen.link/buzz/${formattedTopText}/${formattedBottomText}.jpg`;
-  // Function which generates the memeURL
-  function generateMemeUrl() {
-    const imageUrl = `https://memegen.link/${memeTemplate}/${formattedTopText}/${formattedBottomText}.jpg`;
+  // Function to format text inputs
+  const formatText = (text) => text.trim().replace(/ /g, '_') || '_';
+
+  // Function which generates the meme URL, memoized to avoid unnecessary recreation
+  const generateMemeUrl = useCallback(() => {
+    const formattedTopText = formatText(topText);
+    const formattedBottomText = formatText(bottomText);
+    const template = memeTemplate.trim() || 'buzz'; // Default to 'buzz' template if empty
+
+    const imageUrl = `https://memegen.link/${template}/${formattedTopText}/${formattedBottomText}.jpg`;
     return imageUrl;
-  }
+  }, [topText, bottomText, memeTemplate]); // Dependencies include all values used in the function
 
-  const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
-      setUserHasEntered(true);
-      const newMemeUrl = generateMemeUrl();
-      setMemeUrl(newMemeUrl);
-    }
-  };
-
-  const memeToRender = userHasEntered
-    ? memeUrl // If the user pressed enter, use the memeUrl generated from their input
-    : firstRenderedUrl; // If no custom input yet, use default 'buzz' template
+  // Update the meme URL whenever text or template changes
+  useEffect(() => {
+    const newMemeUrl = generateMemeUrl();
+    setMemeUrl(newMemeUrl);
+  }, [generateMemeUrl]); // Properly add the generateMemeUrl to the dependencies
 
   return (
     <>
@@ -58,7 +55,6 @@ export default function App() {
           placeholderText="Type your text on top"
           value={topText}
           onChange={(event) => setTopText(event.target.value)}
-          onKeyDown={handleKeyDown}
         />
         <Input
           name="bottom-text"
@@ -66,7 +62,6 @@ export default function App() {
           placeholderText="Type your bottom text"
           value={bottomText}
           onChange={(event) => setBottomText(event.target.value)}
-          onKeyDown={handleKeyDown}
         />
         <Input
           name="meme-template"
@@ -74,7 +69,6 @@ export default function App() {
           placeholderText='Type e.g. "buzz" '
           value={memeTemplate}
           onChange={(event) => setMemeTemplate(event.target.value)}
-          onKeyDown={handleKeyDown}
         />
       </div>
       <br />
@@ -87,7 +81,7 @@ export default function App() {
           alignItems: 'center',
         }}
       >
-        <MemePreview memeURL={memeToRender} />
+        <MemePreview memeURL={memeUrl} />
       </div>
       <div
         style={{
@@ -96,7 +90,7 @@ export default function App() {
           alignItems: 'center',
         }}
       >
-        <DownloadButton memeURL={memeToRender} />
+        <DownloadButton memeURL={memeUrl} />
       </div>
     </>
   );
