@@ -74,7 +74,7 @@ export default function App() {
           alignItems: 'center',
         }}
       >
-        <MemePreview memeURL={generateMemeUrl()} />
+        <MemePreview memeURL={memeUrl} />
       </div>
       <div
         style={{
