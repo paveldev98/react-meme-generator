@@ -1,5 +1,5 @@
 import './App.css';
-import { useCallback, useEffect, useState } from 'react';
+import { useState } from 'react';
 import DownloadButton from './DownloadButton';
 import Input from './Input';
 import MemePreview from './MemePreview';
@@ -7,27 +7,19 @@ import MemePreview from './MemePreview';
 export default function App() {
   const [topText, setTopText] = useState('');
   const [bottomText, setBottomText] = useState('');
-  const [memeTemplate, setMemeTemplate] = useState(''); // Default template
-  const [memeUrl, setMemeUrl] = useState('');
+  const [memeTemplate, setMemeTemplate] = useState('aag');
+  const [memeUrl, setMemeUrl] = useState(`https://memegen.link/aag/_/_.jpg`);
 
-  // Function to format text inputs
-  const formatText = (text) => text.trim().replace(/ /g, '_') || '_';
-
-  // Function which generates the meme URL, memoized to avoid unnecessary recreation
-  const generateMemeUrl = useCallback(() => {
-    const formattedTopText = formatText(topText);
-    const formattedBottomText = formatText(bottomText);
-    const template = memeTemplate.trim() || 'aag'; // Default to 'aag' template if empty
-
-    const imageUrl = `https://memegen.link/${template}/${formattedTopText}/${formattedBottomText}.jpg`;
-    return imageUrl;
-  }, [topText, bottomText, memeTemplate]); // Dependencies include all values used in the function
-
-  // Update the meme URL whenever text or template changes
-  useEffect(() => {
-    const newMemeUrl = generateMemeUrl();
-    setMemeUrl(newMemeUrl);
-  }, [generateMemeUrl]); // Properly add the generateMemeUrl to the dependencies
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      const formattedTopText = topText.trim().replace(/ /g, '_') || '_';
+      const formattedBottomText = bottomText.trim().replace(/ /g, '_') || '_';
+      setMemeUrl(
+        `https://memegen.link/${memeTemplate}/${formattedTopText}/${formattedBottomText}.jpg`,
+      );
+      return memeUrl;
+    }
+  };
 
   return (
     <>
@@ -55,6 +47,7 @@ export default function App() {
           placeholderText="Type your text on top"
           value={topText}
           onChange={(event) => setTopText(event.target.value)}
+          onKeyDown={handleKeyDown}
         />
         <Input
           name="bottom-text"
@@ -62,13 +55,15 @@ export default function App() {
           placeholderText="Type your bottom text"
           value={bottomText}
           onChange={(event) => setBottomText(event.target.value)}
+          onKeyDown={handleKeyDown}
         />
         <Input
           name="meme-template"
           label="Meme template"
-          placeholderText='Type e.g. "doge" '
+          placeholderText='Type e.g. "aag" '
           value={memeTemplate}
           onChange={(event) => setMemeTemplate(event.target.value)}
+          onKeyDown={handleKeyDown}
         />
       </div>
       <br />
@@ -90,7 +85,10 @@ export default function App() {
           alignItems: 'center',
         }}
       >
-        <DownloadButton memeURL={memeUrl} />
+        <DownloadButton
+          memeURL={memeUrl}
+          apiLink={`https://api.memegen.link/images/${memeTemplate}/${topText}/${bottomText}.jpg`}
+        />
       </div>
     </>
   );

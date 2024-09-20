@@ -12,6 +12,7 @@ export default function Input(props) {
           borderRadius: '5px',
           border: '2px solid #cccccc',
           height: '20px',
+          marginLeft: '5px',
         }}
       />
     </div>

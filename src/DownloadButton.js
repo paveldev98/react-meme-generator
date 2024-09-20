@@ -1,11 +1,6 @@
-export default function DownloadButton(props) {
-  const handleDownload = () => {
-    const link = document.createElement('a');
-    link.href = props.memeURL;
-    link.download = 'meme.jpg';
-    link.click();
-  };
+import { saveAs } from 'file-saver';
 
+export default function DownloadButton(props) {
   return (
     <button
       style={{
@@ -18,7 +13,24 @@ export default function DownloadButton(props) {
         cursor: 'pointer',
         marginBottom: '20px',
       }}
-      onClick={handleDownload}
+      onClick={async () => {
+        try {
+          // Fetch the image data from the URL
+          const response = await fetch(props.apiLink);
+
+          // Convert the response to a Blob
+          const blob = await response.blob();
+
+          // Determine the file extension based on the MIME type
+          const contentType = response.headers.get('content-type');
+          const extension = contentType.includes('image/jpeg') ? 'jpeg' : 'jpg';
+
+          // Use FileSaver.js to download the file
+          saveAs(blob, `meme.${extension}`);
+        } catch (error) {
+          console.error('Error downloading the meme:', error);
+        }
+      }}
     >
       Download
     </button>
