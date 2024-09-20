@@ -8,17 +8,12 @@ export default function App() {
   const [topText, setTopText] = useState('');
   const [bottomText, setBottomText] = useState('');
   const [memeTemplate, setMemeTemplate] = useState('aag');
-  const [memeUrl, setMemeUrl] = useState(`https://memegen.link/aag/_/_.jpg`);
+  const [memeUrl, setMemeUrl] = useState('https://memegen.link/aag/_/_.jpg');
 
-  const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
-      const formattedTopText = topText.trim().replace(/ /g, '_') || '_';
-      const formattedBottomText = bottomText.trim().replace(/ /g, '_') || '_';
-      setMemeUrl(
-        `https://memegen.link/${memeTemplate}/${formattedTopText}/${formattedBottomText}.jpg`,
-      );
-      return memeUrl;
-    }
+  const generateMemeUrl = () => {
+    const formattedTopText = topText.trim().replace(/ /g, '_') || '_';
+    const formattedBottomText = bottomText.trim().replace(/ /g, '_') || '_';
+    return `https://memegen.link/${memeTemplate}/${formattedTopText}/${formattedBottomText}.jpg`;
   };
 
   return (
@@ -45,25 +40,28 @@ export default function App() {
           name="top-text"
           label="Top text"
           placeholderText="Type your text on top"
-          value={topText}
-          onChange={(event) => setTopText(event.target.value)}
-          onKeyDown={handleKeyDown}
+          onChange={(event) => {
+            setTopText(event.target.value);
+            setMemeUrl(generateMemeUrl());
+          }}
         />
         <Input
           name="bottom-text"
           label="Bottom text"
           placeholderText="Type your bottom text"
-          value={bottomText}
-          onChange={(event) => setBottomText(event.target.value)}
-          onKeyDown={handleKeyDown}
+          onChange={(event) => {
+            setBottomText(event.target.value);
+            setMemeUrl(generateMemeUrl());
+          }}
         />
         <Input
           name="meme-template"
           label="Meme template"
           placeholderText='Type e.g. "aag" '
-          value={memeTemplate}
-          onChange={(event) => setMemeTemplate(event.target.value)}
-          onKeyDown={handleKeyDown}
+          onChange={(event) => {
+            setMemeTemplate(event.target.value);
+            setMemeUrl(generateMemeUrl());
+          }}
         />
       </div>
       <br />
@@ -76,7 +74,7 @@ export default function App() {
           alignItems: 'center',
         }}
       >
-        <MemePreview memeURL={memeUrl} />
+        <MemePreview memeURL={generateMemeUrl()} />
       </div>
       <div
         style={{
