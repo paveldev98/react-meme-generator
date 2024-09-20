@@ -10,9 +10,7 @@ export default function App() {
   const [memeTemplate, setMemeTemplate] = useState('aag');
 
   const generateMemeUrl = () => {
-    const formattedTopText = topText.trim().replace(/ /g, '_') || '_';
-    const formattedBottomText = bottomText.trim().replace(/ /g, '_') || '_';
-    return `https://memegen.link/${memeTemplate}/${formattedTopText}/${formattedBottomText}.jpg`;
+    return `https://api.memegen.link/images/${memeTemplate}/${topText.trim().replace(/ /g, '_') || '_'}/${bottomText.trim().replace(/ /g, '_') || '_'}.jpg`;
   };
 
   return (
@@ -79,10 +77,7 @@ export default function App() {
           alignItems: 'center',
         }}
       >
-        <DownloadButton
-          memeURL={generateMemeUrl()}
-          apiLink={`https://api.memegen.link/images/${memeTemplate}/${topText}/${bottomText}.jpg`}
-        />
+        <DownloadButton memeURL={generateMemeUrl()} />
       </div>
     </>
   );
