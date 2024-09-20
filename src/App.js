@@ -8,7 +8,6 @@ export default function App() {
   const [topText, setTopText] = useState('');
   const [bottomText, setBottomText] = useState('');
   const [memeTemplate, setMemeTemplate] = useState('aag');
-  const [memeUrl, setMemeUrl] = useState('https://memegen.link/aag/_/_.jpg');
 
   const generateMemeUrl = () => {
     const formattedTopText = topText.trim().replace(/ /g, '_') || '_';
@@ -42,7 +41,6 @@ export default function App() {
           placeholderText="Type your text on top"
           onChange={(event) => {
             setTopText(event.target.value);
-            setMemeUrl(generateMemeUrl());
           }}
         />
         <Input
@@ -51,7 +49,6 @@ export default function App() {
           placeholderText="Type your bottom text"
           onChange={(event) => {
             setBottomText(event.target.value);
-            setMemeUrl(generateMemeUrl());
           }}
         />
         <Input
@@ -60,7 +57,6 @@ export default function App() {
           placeholderText='Type e.g. "aag" '
           onChange={(event) => {
             setMemeTemplate(event.target.value);
-            setMemeUrl(generateMemeUrl());
           }}
         />
       </div>
@@ -74,7 +70,7 @@ export default function App() {
           alignItems: 'center',
         }}
       >
-        <MemePreview memeURL={memeUrl} />
+        <MemePreview memeURL={generateMemeUrl()} />
       </div>
       <div
         style={{
@@ -84,7 +80,7 @@ export default function App() {
         }}
       >
         <DownloadButton
-          memeURL={memeUrl}
+          memeURL={generateMemeUrl()}
           apiLink={`https://api.memegen.link/images/${memeTemplate}/${topText}/${bottomText}.jpg`}
         />
       </div>
